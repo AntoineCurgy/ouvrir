@@ -14,7 +14,7 @@
 </style>
 </head>
 <body>
-<p id="etat">Ouverture de Gmail…</p>
+<p id="etat">Ouverture de Gmail… le courriel est en tête de la boîte de réception, non lu.</p>
 <a id="app" href="#">Ouvrir dans l'application Gmail</a>
 <a id="chrome" class="second" href="#">Ouvrir dans Chrome</a>
 <script>
@@ -24,8 +24,10 @@
   // Aucune donnee n'est stockee : l'identifiant passe dans l'adresse.
   var q = new URLSearchParams(location.search);
   var t = (q.get('t') || '').replace(/[^0-9a-fA-F]/g, '');
-  var compte = (q.get('a') || '1').replace(/[^0-9]/g, '') || '1';
-  var app = t ? 'googlegmail:///cv=' + t + '/accountId=' + compte : 'googlegmail://';
+  // Mesure du 2026-09-30 sur l'iPhone d'Antoine : toutes les formes qui visent une
+  // conversation (cv=, thread/, tl=) rendent « Impossible de reconnaitre ce lien » ;
+  // seule googlegmail:// ouvre l'application, sur la boite de reception.
+  var app = 'googlegmail://';
   var web = 'mail.google.com/mail/u/0/' + (t ? '#all/' + t : '');
   var chrome = 'googlechromes://' + web;
   document.getElementById('app').href = app;
