@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Essai des liens Gmail</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 24px 16px; background: Canvas; color: CanvasText; }
+  a { display: block; margin: 14px 0; padding: 14px; border-radius: 12px; text-decoration: none; background: #1a73e8; color: #fff; font-weight: 600; }
+  small { display: block; opacity: .7; font-weight: 400; margin-top: 4px; word-break: break-all; }
+</style>
+</head>
+<body>
+<p>Appuyez sur chaque bouton, l'un après l'autre, et notez lequel ouvre le courriel lui-même.</p>
+<div id="liste"></div>
+<script>
+  // AUT_ANT_01 : essai des formes de lien de l'application Gmail sur iOS, non documentees par Google.
+  var q = new URLSearchParams(location.search);
+  var t = (q.get('t') || '').replace(/[^0-9a-fA-F]/g, '');
+  var formes = [
+    ['1', 'googlegmail:///cv=' + t],
+    ['2', 'googlegmail:///cv=' + t + '/accountId=0'],
+    ['3', 'googlegmail:///cv=' + t + '/accountId=2'],
+    ['4', 'googlegmail://thread/' + t],
+    ['5', 'googlegmail:///tl=inbox'],
+    ['6', 'googlegmail://']
+  ];
+  var liste = document.getElementById('liste');
+  formes.forEach(function (f) {
+    var a = document.createElement('a');
+    a.href = f[1];
+    a.innerHTML = 'Essai ' + f[0] + '<small>' + f[1] + '</small>';
+    liste.appendChild(a);
+  });
+</script>
+</body>
+</html>
