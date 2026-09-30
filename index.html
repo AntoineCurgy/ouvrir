@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ouvrir le courriel</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 32px 16px; text-align: center; background: Canvas; color: CanvasText; }
+  a { display: block; margin: 16px auto; max-width: 320px; padding: 14px; border-radius: 12px; text-decoration: none; background: #1a73e8; color: #fff; font-weight: 600; }
+  a.second { background: transparent; color: #1a73e8; border: 1px solid #1a73e8; }
+  p { opacity: .7; }
+</style>
+</head>
+<body>
+<p id="etat">Ouverture de Gmail…</p>
+<a id="app" href="#">Ouvrir dans l'application Gmail</a>
+<a id="chrome" class="second" href="#">Ouvrir dans Chrome</a>
+<script>
+  // AUT_ANT_01 : rebond d'un signal Telegram vers l'application Gmail.
+  // Telegram n'accepte que des liens https ; l'application Gmail ne s'ouvre sur
+  // une conversation que par son propre schema, non documente par Google.
+  // Aucune donnee n'est stockee : l'identifiant passe dans l'adresse.
+  var q = new URLSearchParams(location.search);
+  var t = (q.get('t') || '').replace(/[^0-9a-fA-F]/g, '');
+  var compte = (q.get('a') || '1').replace(/[^0-9]/g, '') || '1';
+  var app = t ? 'googlegmail:///cv=' + t + '/accountId=' + compte : 'googlegmail://';
+  var web = 'mail.google.com/mail/u/0/' + (t ? '#all/' + t : '');
+  var chrome = 'googlechromes://' + web;
+  document.getElementById('app').href = app;
+  document.getElementById('chrome').href = chrome;
+  location.href = app;
+  setTimeout(function () {
+    if (!document.hidden) {
+      document.getElementById('etat').textContent = "Gmail ne s'est pas ouvert : choisissez ci-dessous.";
+    }
+  }, 1500);
+</script>
+</body>
+</html>
