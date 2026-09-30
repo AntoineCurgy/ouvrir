@@ -14,28 +14,29 @@
 </style>
 </head>
 <body>
-<p id="etat">Ouverture de Gmail… le courriel est en tête de la boîte de réception, non lu.</p>
-<a id="app" href="#">Ouvrir dans l'application Gmail</a>
-<a id="chrome" class="second" href="#">Ouvrir dans Chrome</a>
+<p id="etat">Ouverture du courriel…</p>
+<a id="mail" href="#">Ouvrir dans Mail</a>
+<a id="gmail" class="second" href="googlegmail://">Ouvrir Gmail (boîte de réception)</a>
 <script>
-  // AUT_ANT_01 : rebond d'un signal Telegram vers l'application Gmail.
-  // Telegram n'accepte que des liens https ; l'application Gmail ne s'ouvre sur
-  // une conversation que par son propre schema, non documente par Google.
-  // Aucune donnee n'est stockee : l'identifiant passe dans l'adresse.
+  // AUT_ANT_01 : rebond d'un signal Telegram vers le courriel lui-meme.
+  // Telegram n'accepte que des liens https. Mesure du 2026-09-30 sur l'iPhone
+  // d'Antoine : l'app Gmail ne sait ouvrir aucun courriel precis (dix formes
+  // essayees) ; l'app Mail d'Apple l'ouvre par message://<Message-ID>, a condition
+  // que le compte y soit ajoute et le courriel telecharge. Rien n'est stocke :
+  // l'identifiant passe dans l'adresse.
   var q = new URLSearchParams(location.search);
-  var t = (q.get('t') || '').replace(/[^0-9a-fA-F]/g, '');
-  // Mesure du 2026-09-30 sur l'iPhone d'Antoine : toutes les formes qui visent une
-  // conversation (cv=, thread/, tl=) rendent « Impossible de reconnaitre ce lien » ;
-  // seule googlegmail:// ouvre l'application, sur la boite de reception.
-  var app = 'googlegmail://';
-  var web = 'mail.google.com/mail/u/0/' + (t ? '#all/' + t : '');
-  var chrome = 'googlechromes://' + web;
-  document.getElementById('app').href = app;
-  document.getElementById('chrome').href = chrome;
-  location.href = app;
+  var m = q.get('m') || '';
+  if (m) {
+    var cible = 'message://' + encodeURIComponent('<' + m.replace(/^<|>$/g, '') + '>');
+    document.getElementById('mail').href = cible;
+    location.href = cible;
+  } else {
+    document.getElementById('mail').style.display = 'none';
+    location.href = 'googlegmail://';
+  }
   setTimeout(function () {
     if (!document.hidden) {
-      document.getElementById('etat').textContent = "Gmail ne s'est pas ouvert : choisissez ci-dessous.";
+      document.getElementById('etat').textContent = "Le courriel ne s'est pas ouvert : choisissez ci-dessous.";
     }
   }, 1500);
 </script>
